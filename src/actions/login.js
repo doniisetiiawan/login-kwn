@@ -32,7 +32,7 @@ export function login(userData) {
   };
 
   return (dispatch) => fetch(
-    'http://reactjsblueprints-useradmin.herokuapp.com/v1/login',
+    'http://localhost:3000/v1/login',
     options,
   )
     .then((response) => response.json())
