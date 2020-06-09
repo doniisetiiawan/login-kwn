@@ -1,10 +1,14 @@
 /* eslint-disable react/prop-types */
 import React, { Component } from 'react';
 import {
-  Button, Col, Container, Form, Row,
+  Button,
+  Col,
+  Container,
+  Form,
+  Row,
 } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { login } from './actions/login';
+import { login, setLoginDetails } from './actions/login';
 import './App.css';
 
 class App extends Component {
@@ -13,6 +17,21 @@ class App extends Component {
     this.username = React.createRef();
     this.password = React.createRef();
   }
+
+  // eslint-disable-next-line camelcase
+  UNSAFE_componentWillMount = () => {
+    const { dispatch } = this.props;
+    const storedSessionLogin = sessionStorage.getItem(
+      'login',
+    );
+    if (storedSessionLogin) {
+      dispatch(
+        setLoginDetails(
+          JSON.parse(storedSessionLogin).loginResponse,
+        ),
+      );
+    }
+  };
 
   handleSelect = () => {
     const { dispatch } = this.props;
@@ -43,7 +62,9 @@ class App extends Component {
         ref={this.password}
       />
       <br />
-      <Button onClick={() => this.handleSelect()}>Log in</Button>
+      <Button onClick={() => this.handleSelect()}>
+        Log in
+      </Button>
     </div>
   );
 
@@ -65,9 +86,7 @@ class App extends Component {
 
 function mapStateToProps(state) {
   const { user } = state;
-  const {
-    message,
-  } = user || {
+  const { message } = user || {
     message: '',
   };
 
